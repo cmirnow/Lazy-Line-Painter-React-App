@@ -1,0 +1,37 @@
+{
+  "name": "lazy-painter-react",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "jquery": "^3.7.0",
+    "lazy-line-painter": "^1.7.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-particles": "^2.10.1",
+    "react-scripts": "5.0.1",
+    "tslib": "^2.5.3",
+    "tsparticles": "^2.10.1",
+    "tsparticles-engine": "^2.10.1"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
