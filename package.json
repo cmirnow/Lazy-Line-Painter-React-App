@@ -5,7 +5,6 @@
   "homepage": "https://cmirnow.github.io/Lazy-Line-Painter-React-App",
   "dependencies": {
     "jquery": "^3.7.0",
-    "lazy-line-painter": "^1.7.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-particles": "^2.10.1",
