@@ -2,6 +2,7 @@
   "name": "Lazy-Line-Painter-React-App",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://cmirnow.github.io/Lazy-Line-Painter-React-App",
   "dependencies": {
     "jquery": "^3.7.0",
     "lazy-line-painter": "^1.7.0",
@@ -14,6 +15,8 @@
     "tsparticles-engine": "^2.10.1"
   },
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -33,5 +36,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "gh-pages": "^5.0.0"
   }
 }
