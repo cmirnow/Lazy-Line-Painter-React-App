@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/Lazy-Line-Painter-React-App/static/css/main.0cd2fecf.css",
-    "main.js": "/Lazy-Line-Painter-React-App/static/js/main.339b8c8f.js",
+    "main.js": "/Lazy-Line-Painter-React-App/static/js/main.0084ffe5.js",
     "index.html": "/Lazy-Line-Painter-React-App/index.html",
     "main.0cd2fecf.css.map": "/Lazy-Line-Painter-React-App/static/css/main.0cd2fecf.css.map",
-    "main.339b8c8f.js.map": "/Lazy-Line-Painter-React-App/static/js/main.339b8c8f.js.map"
+    "main.0084ffe5.js.map": "/Lazy-Line-Painter-React-App/static/js/main.0084ffe5.js.map"
   },
   "entrypoints": [
     "static/css/main.0cd2fecf.css",
-    "static/js/main.339b8c8f.js"
+    "static/js/main.0084ffe5.js"
   ]
 }
