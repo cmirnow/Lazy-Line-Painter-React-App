@@ -12,14 +12,13 @@
  *
  */
 
-
 /*
  *
  * TERMS OF USE - EASING EQUATIONS
  *
  * Open source under the BSD License.
  *
- * Copyright Â© 2001 Robert Penner
+ * Copyright © 2001 Robert Penner
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
@@ -48,31 +47,17 @@
 import jQuery from "jquery";
 jQuery(document).ready(function($) {
 
-    'use strict';
-
     var dataKey = 'lazyLinePainter';
     var className = 'lazylinepainter';
 
     var methods = {
-
-        /**
-         * init
-         * Responsible for caching user options,
-         * creating svg element and setting dimensions.
-         * @public
-         * @param  {object} opts user defined options
-         */
         init: function(userOpts) {
-
             return this.each(function() {
-
                 var $this = $(this);
                 var data = $this.data(dataKey);
                 $this.addClass(className);
 
-                // Continue if the plugin hasn't been initialized
                 if (!data) {
-
                     var options = _getOptions($this, userOpts);
                     var totalDuration = options.delay + _getTotalDuration(options.paths);
                     var longestDuration = options.delay + _getLongestDuration(options.paths);
@@ -89,44 +74,25 @@ jQuery(document).ready(function($) {
             });
         },
 
-
-        /**
-         * paint
-         * Responsible for drawing path.
-         * @public
-         */
         paint: function() {
-
             return this.each(function() {
-
-                // retrieve data object
                 var $this = $(this);
                 var data = $this.data(dataKey);
 
                 $this.lazylinepainter('erase');
 
-                // begin animation
                 data.rAF = requestAnimationFrame(function(timestamp) {
                     _paint(timestamp, data);
                 });
 
-                // fire onStart callback
                 if (data.onStart !== null) {
                     data.onStart();
                 }
             });
         },
 
-
-        /**
-         * pause
-         * Responsible for pausing path animation.
-         * @public
-         */
         pause: function() {
-
             return this.each(function() {
-
                 var data = $(this).data(dataKey);
 
                 if (!data.paused) {
@@ -136,16 +102,8 @@ jQuery(document).ready(function($) {
             });
         },
 
-
-        /**
-         * resume
-         * Responsible for resuming path animation.
-         * @public
-         */
         resume: function() {
-
             return this.each(function() {
-
                 var data = $(this).data(dataKey);
 
                 if (data.paused) {
@@ -157,35 +115,19 @@ jQuery(document).ready(function($) {
             });
         },
 
-
-        /**
-         * erase
-         * Responsible for clearing path,
-         * paint can still be called on the element after it has been erased.
-         * @public
-         */
         erase: function() {
-
             return this.each(function() {
-
-                // retrieve data object
                 var $this = $(this);
                 var data = $this.data(dataKey);
 
-                // reset / cancel rAF
                 data.startTime = null;
                 data.elapsedTime = null;
                 cancelAnimationFrame(data.rAF);
 
-                // reset callback
                 data.onStrokeCompleteDone = false;
-
-                // reset paused
                 data.paused = false;
 
-                // empty contents of svg
                 for (var i = 0; i < data.paths.length; i++) {
-
                     var path = data.paths[i];
                     path.el.style.strokeDashoffset = path.length;
                     path.onStrokeCompleteDone = false;
@@ -194,67 +136,33 @@ jQuery(document).ready(function($) {
             });
         },
 
-
-        /**
-         * destroy
-         * Responsible for removing lazyline data and element from DOM
-         * @public
-         */
         destroy: function() {
-
             return this.each(function() {
-
-                // retrieve / remove data object
                 var $this = $(this);
                 $this.removeData(dataKey);
-
-                // empty container element
                 $this.empty();
-
-                // remove class
                 $this.removeClass(className);
             });
         },
 
-
-        /**
-         * set
-         * @public
-         */
         set: function(progress) {
-
             return this.each(function() {
-
                 var $this = $(this);
                 var data = $this.data(dataKey);
 
-                // set elapsedTime
                 data.progress = progress;
                 _updatePaths(data);
             });
         },
 
-
-        /**
-         * get
-         * @public
-         */
         get: function() {
-
             var $this = $(this);
             var data = $this.data(dataKey);
             return data;
         },
 
-
-        /**
-         * resize
-         * @public
-         */
         resize: function() {
-
             this.each(function() {
-
                 var $this = $(this);
                 var data = $this.data(dataKey);
                 data.offset = $this.offset();
@@ -266,14 +174,8 @@ jQuery(document).ready(function($) {
         }
     };
 
-
-
-
-
     var _getOptions = function($this, userOpts) {
-
         var defaultOpts = {
-
             'strokeWidth': 2,
             'strokeDash': null,
             'strokeColor': '#000',
@@ -281,13 +183,11 @@ jQuery(document).ready(function($) {
             'strokeCap': 'round',
             'strokeJoin': 'round',
             'strokeOpacity': 1,
-
             'onComplete': null,
             'onUpdate': null,
             'onStart': null,
             'onStrokeStart': null,
             'onStrokeComplete': null,
-
             'delay': 0,
             'ease': null,
             'overrideKey': null,
@@ -296,18 +196,11 @@ jQuery(document).ready(function($) {
             'reverse': false,
             'paused': false,
             'progress': 0,
-
             'longestDuration': 0,
             'playhead': 0
-
         };
 
         var options = $.extend(defaultOpts, userOpts);
-
-        // TODO - remove overrideKey, user should organise svgData before init
-        // Set up path information
-        // if overrideKey has been defined - use overrideKey as key within the svgData object.
-        // else - use the elements id as key within the svgData object.
         var target = options.overrideKey ? options.overrideKey : $this.attr('id').replace('#', '');
         options.width = options.svgData[target].dimensions.width;
         options.height = options.svgData[target].dimensions.height;
@@ -317,13 +210,10 @@ jQuery(document).ready(function($) {
         return options;
     };
 
-
     var _setupPaths = function(options) {
-
         var startTime = options.reverse ? options.totalDuration : 0;
 
         for (var i = 0; i < options.paths.length; i++) {
-
             var path = options.paths[i];
 
             path.progress = 0;
@@ -331,7 +221,7 @@ jQuery(document).ready(function($) {
             path.el = _getPath(options, i);
             path.length = _getPathLength(path.el);
             path.delay = path.delay || 0;
-            path.duration = path.duration;
+            // Удалено: path.duration = path.duration;
             path.positions = _getPathPoints(path.el, path.length);
             path.ease = path.ease || null;
 
@@ -366,16 +256,8 @@ jQuery(document).ready(function($) {
             path.durationProgress = durationProgress;
             options.playhead += (path.duration + path.delay);
         }
-    }
+    };
 
-
-    /**
-     * adjustStartTime
-     * Responsible for managing time.
-     * @private
-     * @param  {number} timestamp identifies current time
-     * @param  {object} data      contains options set on init() and paint()
-     */
     var adjustStartTime = function(timestamp, data) {
         data.startTime = timestamp - data.elapsedTime;
         requestAnimationFrame(function(timestamp) {
@@ -383,18 +265,7 @@ jQuery(document).ready(function($) {
         });
     };
 
-
-    /**
-     * _paint
-     * Responsible for animating paths.
-     * Path incrementation is performed using requestAnimationFrame.
-     * @private
-     * @param  {number} timestamp   identifies current time
-     * @param  {object} data        contains options set on init() and paint()
-     */
     var _paint = function(timestamp, data) {
-
-        // set startTime
         if (!data.startTime) {
             data.startTime = timestamp;
         }
@@ -403,30 +274,24 @@ jQuery(document).ready(function($) {
             data.onUpdate();
         }
 
-        // set elapsedTime
         data.elapsedTime = timestamp - data.startTime;
         data.progress = _getProgress(data.totalDuration, data.startTime, data.elapsedTime, data.ease);
 
         _updatePaths(data);
 
         if (data.progress < 1) {
-
             data.rAF = requestAnimationFrame(function(timestamp) {
                 _paint(timestamp, data);
             });
         } else {
-
             if (data.onComplete !== null) {
                 data.onComplete();
             }
         }
     };
 
-
     var _updatePaths = function(data) {
-
         for (var i = 0; i < data.paths.length; i++) {
-
             var path = data.paths[i];
             var elapsedProgress = _getElapsedProgress(data, path);
             path.progress = _getProgress(1, 0, elapsedProgress, path.ease);
@@ -436,9 +301,7 @@ jQuery(document).ready(function($) {
         }
     };
 
-
     var _getElapsedProgress = function(data, path) {
-
         var elapsedProgress;
 
         if (data.progress > path.startProgress && data.progress < (path.startProgress + path.durationProgress)) {
@@ -452,9 +315,7 @@ jQuery(document).ready(function($) {
         return elapsedProgress;
     };
 
-
     var _getProgress = function(duration, start, elapsed, ease) {
-
         var progress;
 
         if (elapsed > 0 && elapsed < duration) {
@@ -472,9 +333,7 @@ jQuery(document).ready(function($) {
         return progress;
     };
 
-
     var _setLine = function(data, path) {
-
         var el = path.el;
         var length = path.progress * path.length;
 
@@ -485,38 +344,27 @@ jQuery(document).ready(function($) {
         }
     };
 
-
     var _updateStrokeCallbacks = function(data, path) {
-
         if (path.progress === 1) {
-
-            // fire onStrokeComplete callback
             if (data.onStrokeComplete && !path.onStrokeCompleteDone) {
                 data.onStrokeComplete(path);
-
                 if (!path.onStrokeComplete) {
                     path.onStrokeCompleteDone = true;
                 }
             }
 
-            // fire onStrokeComplete callback of each line
             if (path.onStrokeComplete && !path.onStrokeCompleteDone) {
                 path.onStrokeComplete(path);
                 path.onStrokeCompleteDone = true;
             }
-
         } else if (path.progress > 0.00001) {
-
-            // fire onStrokeStart callback
             if (data.onStrokeStart && !path.onStrokeStartDone) {
                 data.onStrokeStart(path);
-
                 if (!path.onStrokeStart) {
                     path.onStrokeStartDone = true;
                 }
             }
 
-            // fire onStrokeStart callback of each line
             if (path.onStrokeStart && !path.onStrokeStartDone) {
                 path.onStrokeStart(path);
                 path.onStrokeStartDone = true;
@@ -528,12 +376,6 @@ jQuery(document).ready(function($) {
         }
     };
 
-
-    /**
-     * _updatePosition
-     * Responsible for updating the paths x / y position.
-     * @private
-     */
     var _updatePosition = function(data, path) {
         var index = Math.round((path.progress * (path.length - 1)));
         var position = path.positions[index];
@@ -543,7 +385,6 @@ jQuery(document).ready(function($) {
         };
     };
 
-
     var _getTotalDuration = function(paths) {
         var totalDuration = 0;
         for (var i = 0; i < paths.length; i++) {
@@ -552,7 +393,6 @@ jQuery(document).ready(function($) {
         }
         return totalDuration;
     };
-
 
     var _getLongestDuration = function(paths) {
         var longestDuration = 0;
@@ -565,15 +405,6 @@ jQuery(document).ready(function($) {
         return longestDuration;
     };
 
-
-    /**
-     * _getPath
-     * Responsible for creating a svg path element, and setting attributes on path.
-     * @private
-     * @param  {object} data contains options set on init
-     * @param  {number} i    path index
-     * @return {object} path svg path element
-     */
     var _getPath = function(data, i) {
         var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
         var $path = $(path);
@@ -582,22 +413,10 @@ jQuery(document).ready(function($) {
         return path;
     };
 
-
-    /**
-     * _getPathLength
-     * Responsible for returning a svg path length.
-     * @return {number} path length
-     */
     var _getPathLength = function(el) {
         return Math.ceil(el.getTotalLength());
     };
 
-
-    /**
-     * _getPathPoints
-     * Responsible for returning a svg path coords.
-     * @return {array} path coords
-     */
     var _getPathPoints = function(el, length) {
         var arr = [];
         for (var i = 0; i < length; i++) {
@@ -606,20 +425,10 @@ jQuery(document).ready(function($) {
                 x: position.x,
                 y: position.y
             });
-        };
+        }
         return arr;
     };
 
-
-    /**
-     * _getAttributes
-     * Returns an object of path attributes,
-     * selects either global options set on init or specific path option
-     * @private
-     * @param  {object} data  contains options set on init()
-     * @param  {object} value contains specific path options
-     * @return {object}       obj of path attributes
-     */
     var _getAttributes = function(data, value) {
         return {
             'd': value.path,
@@ -632,14 +441,6 @@ jQuery(document).ready(function($) {
         };
     };
 
-
-    /**
-     * _getSVGElement
-     * Returns empty svg element with specified viewBox aspect ratio.
-     * @private
-     * @param  {string} viewBox
-     * @return {obj}    jquery wrapped svg el
-     */
     var _getSVGElement = function(viewBox) {
         var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
         svg.setAttributeNS(null, 'viewBox', viewBox);
@@ -647,11 +448,6 @@ jQuery(document).ready(function($) {
         return $(svg);
     };
 
-
-    /**
-     * _getStrokeDashArray
-     * @private
-     */
     var _getStrokeDashArray = function(path, options, length) {
         var strokeDash;
         if (path.strokeDash) {
@@ -660,41 +456,30 @@ jQuery(document).ready(function($) {
             strokeDash = _getStrokeDashString(options.strokeDash, length);
         } else {
             strokeDash = length + ' ' + length;
-        };
+        }
         return strokeDash;
     };
 
-
-    /**
-     * _getStrokeDashString
-     * @private
-     */
     var _getStrokeDashString = function(dashArray, length) {
         var strokeDashString = '';
         var strokeDashArray = dashArray.split(',');
         var strokeDashTotal = 0;
         var strokeDashNum;
         var strokeDashRemainder;
-        for (var i = strokeDashArray.length - 1; i >= 0; i--) {
-            strokeDashTotal += Number(strokeDashArray[i]);
-        };
+
+        for (var j = strokeDashArray.length - 1; j >= 0; j--) {
+            strokeDashTotal += Number(strokeDashArray[j]);
+        }
         strokeDashNum = Math.floor(length / strokeDashTotal);
         strokeDashRemainder = length - (strokeDashNum * strokeDashTotal);
-        for (var i = strokeDashNum - 1; i >= 0; i--) {
+
+        for (var k = strokeDashNum - 1; k >= 0; k--) {
             strokeDashString += (dashArray + ', ');
-        };
+        }
         var preArray = strokeDashString + strokeDashRemainder + ', ' + length;
         return preArray.split(',').join('px,') + 'px';
     };
 
-
-    /**
-     * lazylinepainter
-     * Extends jQuery's prototype object.
-     * @public
-     * @param  {string}     method  Expects lazylinepainter method name as string.
-     * @return {function}           Returns lazylinepainter method.
-     */
     $.fn.lazylinepainter = function(method) {
         if (methods[method]) {
             return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
@@ -705,10 +490,7 @@ jQuery(document).ready(function($) {
         }
     };
 
-
-    /* penner easing */
     var easing = {
-
         easeLinear: function(t, b, c, d) {
             return c * t / d + b;
         },
@@ -778,16 +560,16 @@ jQuery(document).ready(function($) {
         },
 
         easeInExpo: function(t, b, c, d) {
-            return (t == 0) ? b : c * Math.pow(2, 10 * (t / d - 1)) + b;
+            return (t === 0) ? b : c * Math.pow(2, 10 * (t / d - 1)) + b;
         },
 
         easeOutExpo: function(t, b, c, d) {
-            return (t == d) ? b + c : c * (-Math.pow(2, -10 * t / d) + 1) + b;
+            return (t === d) ? b + c : c * (-Math.pow(2, -10 * t / d) + 1) + b;
         },
 
         easeInOutExpo: function(t, b, c, d) {
-            if (t == 0) return b;
-            if (t == d) return b + c;
+            if (t === 0) return b;
+            if (t === d) return b + c;
             if ((t /= d / 2) < 1) return c / 2 * Math.pow(2, 10 * (t - 1)) + b;
             return c / 2 * (-Math.pow(2, -10 * --t) + 2) + b;
         },
@@ -809,13 +591,15 @@ jQuery(document).ready(function($) {
             var s = 1.70158;
             var p = 0;
             var a = c;
-            if (t == 0) return b;
-            if ((t /= d) == 1) return b + c;
+            if (t === 0) return b;
+            if ((t /= d) === 1) return b + c;
             if (!p) p = d * .3;
             if (a < Math.abs(c)) {
                 a = c;
-                var s = p / 4;
-            } else var s = p / (2 * Math.PI) * Math.asin(c / a);
+                s = p / 4;
+            } else {
+                s = p / (2 * Math.PI) * Math.asin(c / a);
+            }
             return -(a * Math.pow(2, 10 * (t -= 1)) * Math.sin((t * d - s) * (2 * Math.PI) / p)) + b;
         },
 
@@ -823,13 +607,15 @@ jQuery(document).ready(function($) {
             var s = 1.70158;
             var p = 0;
             var a = c;
-            if (t == 0) return b;
-            if ((t /= d) == 1) return b + c;
+            if (t === 0) return b;
+            if ((t /= d) === 1) return b + c;
             if (!p) p = d * .3;
             if (a < Math.abs(c)) {
                 a = c;
-                var s = p / 4;
-            } else var s = p / (2 * Math.PI) * Math.asin(c / a);
+                s = p / 4;
+            } else {
+                s = p / (2 * Math.PI) * Math.asin(c / a);
+            }
             return a * Math.pow(2, -10 * t) * Math.sin((t * d - s) * (2 * Math.PI) / p) + c + b;
         },
 
@@ -837,29 +623,31 @@ jQuery(document).ready(function($) {
             var s = 1.70158;
             var p = 0;
             var a = c;
-            if (t == 0) return b;
-            if ((t /= d / 2) == 2) return b + c;
+            if (t === 0) return b;
+            if ((t /= d / 2) === 2) return b + c;
             if (!p) p = d * (.3 * 1.5);
             if (a < Math.abs(c)) {
                 a = c;
-                var s = p / 4;
-            } else var s = p / (2 * Math.PI) * Math.asin(c / a);
+                s = p / 4;
+            } else {
+                s = p / (2 * Math.PI) * Math.asin(c / a);
+            }
             if (t < 1) return -.5 * (a * Math.pow(2, 10 * (t -= 1)) * Math.sin((t * d - s) * (2 * Math.PI) / p)) + b;
             return a * Math.pow(2, -10 * (t -= 1)) * Math.sin((t * d - s) * (2 * Math.PI) / p) * .5 + c + b;
         },
 
         easeInBack: function(t, b, c, d, s) {
-            if (s == undefined) s = 1.70158;
+            if (s === undefined) s = 1.70158;
             return c * (t /= d) * t * ((s + 1) * t - s) + b;
         },
 
         easeOutBack: function(t, b, c, d, s) {
-            if (s == undefined) s = 1.70158;
+            if (s === undefined) s = 1.70158;
             return c * ((t = t / d - 1) * t * ((s + 1) * t + s) + 1) + b;
         },
 
         easeInOutBack: function(t, b, c, d, s) {
-            if (s == undefined) s = 1.70158;
+            if (s === undefined) s = 1.70158;
             if ((t /= d / 2) < 1) return c / 2 * (t * t * (((s *= (1.525)) + 1) * t - s)) + b;
             return c / 2 * ((t -= 2) * t * (((s *= (1.525)) + 1) * t + s) + 2) + b;
         },
@@ -884,6 +672,6 @@ jQuery(document).ready(function($) {
             if (t < d / 2) return easing.easeInBounce(t * 2, 0, c, d) * .5 + b;
             return easing.easeOutBounce(t * 2 - d, 0, c, d) * .5 + c * .5 + b;
         }
-    }
+    };
 
 });

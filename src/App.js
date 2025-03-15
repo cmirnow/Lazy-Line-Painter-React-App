@@ -1,15 +1,15 @@
-import React, { useCallback } from "react";
+import { useCallback } from "react";
 import Particles from "react-particles";
 import { loadFull } from "tsparticles";
-import "./App.css";
-import particlesOptions from "./particles.json";
-import "./jquery.lazylinepainter-1.7.0_modified";
-import "./painter";
-import Footer from "./Footer";
+import particlesOptions from "./assets/particles.json";
+import "./styles/App.css";
+import "./assets/jquery.lazylinepainter-1.7.0_modified.js";
+import "./assets/painter.js";
+import Footer from "./components/Footer";
 
 function App() {
-  const particlesInit = useCallback((main) => {
-    loadFull(main);
+  const particlesInit = useCallback((engine) => {
+    loadFull(engine);
   }, []);
 
   return (
@@ -17,7 +17,7 @@ function App() {
       <Particles options={particlesOptions} init={particlesInit} />
       <header className="App-header">
         <div id="content_lazy">
-          <div id="lazy"></div>
+          <div id="lazy" />
         </div>
       </header>
       <Footer />

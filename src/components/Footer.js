@@ -1,10 +1,13 @@
-const Footer = () => {
+import { memo } from "react";
+
+const Footer = memo(() => {
   const startYear = 2023;
   const currentYear = new Date().getFullYear();
+
   return (
-    <div className="footer">
+    <footer className="footer">
       <div className="copyright">
-        Copyright &copy;
+        Copyright ©
         <a
           className="App-link"
           alt="Masterpro Project"
@@ -14,13 +17,11 @@ const Footer = () => {
           rel="noreferrer"
         >
           Masterpro.ws{" "}
-          {startYear === currentYear
-            ? startYear
-            : startYear + "-" + currentYear}
+          {startYear === currentYear ? startYear : `${startYear}-${currentYear}`}
         </a>
       </div>
-    </div>
+    </footer>
   );
-};
+});
 
 export default Footer;
